@@ -1,0 +1,67 @@
+
+***************
+Files Structure
+web_mining/
+		   index.html
+		   main.py
+		   auto_complete/
+		  				/uni.py
+		  				/bi.py
+		  				/try.py
+		  				/tst.py
+		  				/test.txt
+		   spell_corrector/
+		   				/spellcorrector.h
+		   				/spell_corrector.cpp
+		   media/
+		   		/bootstrap-responsive.css
+		   		/bootstrap.css
+		   		/bootstrap.min.js
+		   		/jquery.min.js
+		   data_files/
+		   			 /SentiWordNet.txt
+		   			 /big.txt
+		   			 /out<1-10].txt
+
+**************
+Auto Complete:
+	- Auto complete four files as listed above. Firstly using uni.py bi.py and try.py we generate all unigrams bi-grams and tri-grams	respectively from the Corpus (which are SentiWordNet.txt and big.txt) and stores them in test.txt file in decreasing order of their popularity in corpus.
+	- tst.py file read this corpus and generate appropriate tri structure to server requests.
+	- We had very limited Corpus of English Text to train our Data Structure. Larger the corpus you will have better suggestion for completing phrase.
+	- We have supported upto tri-grams.
+	- on running tst.py it will open a server socket on specified port given as argument and will server requests for suggestions on that port.
+		$ python tst.py 5000
+
+	Note: This will take sometime as it loads data into memory and Construct the data structure.
+
+
+****************
+Spell Suggestion:
+	Spell Suggestion contain two files as described above.
+	Working of spell suggestion:
+		- It reads all the data from corpus and make dictionary of words.
+		- query is a single word
+		- For a given query, we find all the words which are very 1 levenstein distance away. If any one of them is proper dictionary word then we are done with it. Otherwise we find all valid dictionary words which are two levenstein distance away from query and are valid words. We return the most frequent word from all possible word.
+		- This is very fast and we tested well.
+
+****************
+Media
+	Media folder contains the CSS and Javascript files for UI of webpage.
+
+
+***************
+Main.py
+	Main code which starts all the services.
+	Then option index.html and perform your queries.
+	Note: Wait for sometime until all loading of files are completed.
+
+
+****************
+index.html
+	Main file which is interface for performing query. On the left side there are three port options.
+	Please make sure you enter the same port numbers on the index.html and when you run the main.py
+
+
+****************
+HelloLucene
+			Contains main Lucene code which search for a similar queries

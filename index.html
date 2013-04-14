@@ -1,0 +1,256 @@
+<html lang="en">
+
+	<head>
+		<title>Suggestor</title>
+
+		<meta charset="utf-8">
+		<link href="media/bootstrap.css" rel="stylesheet" type="text/css">
+		<link href="media/bootstrap-responsive.css" rel="stylesheet" type="text/css">
+		<style type="text/css">
+			body {
+				padding-top: 30px;
+				font-size: 16px;
+			}
+			#searchbar {
+				font-size: 24px;
+				height: 40px;
+				width: 450px;
+				padding-top: 8px;
+			}
+			legend {
+				font-size: 32px;
+			}
+			hr {
+				margin-top: 0px;
+			}
+			#suggestion {
+				color: #0088cc;
+			}
+			#suggestion:hover {
+				text-decoration: underline;
+			}
+			.mt {
+				height: 30px !important;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="container">
+			<div class="span6">
+				<div>
+					<input type="text" id="searchbar" autocomplete="off" placeholder="Search Here" data-provide="typeahead" data-items="8" data-source='["saif", "hasan"]'/>
+				</div>
+				<div style="min-height: 40px; min-width:200px; margin-bottom: 30px">
+					<div id="spellAlert" class="alert alert-info hide">
+						<span class="muted">Showing results for </span><span id="suggestion" class ="lead"></span>.
+						 <span class="muted">Did you really mean </span><a href="javascript:perform_search2()"><span id="originalQuery" class="lead"></span></a><span class="muted">?</span>
+					</div>
+				</div>
+				
+
+				<table id="results" class="table table-hover">
+					
+				</table>
+			</div>
+			<div class="span4">
+				<form class="form-horizontal">
+					<div class="control-group">
+						<label class="control-label" for="sport">Spell Suggestion Port: </label>
+						<div class="controls">
+							<input class="mt" type="text" id="sport" placeholder="" value="6000">
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="cport">Auto Completion Port: </label>
+						<div class="controls">
+							<input class="mt" type="text" id="cport" placeholder="" value="6001">
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="rport" >Similar Query Port: </label>
+						<div class="controls">
+							<input class="mt" type="text" id="rport" placeholder="" value="6002">
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+
+		<script type="text/javascript" src="media/jquery.min.js" ></script>
+		<script type="text/javascript" src="media/bootstrap.min.js" ></script>
+		<script type="text/javascript">
+			$("#searchbar").keypress(function(e) {
+				//$(".typeahead").typeahead().hide();
+			});
+
+			$("#searchbar").keyup(function(e) {
+				if(e.which==13) {
+					perform_search();
+					//do_suggestion();
+				} else {
+					get_completions();
+				}
+			});
+
+			var originalQuery;
+			var corrected_query;
+			var cnt = 0;
+			var words = [];
+			var done;
+
+			/********* General Function ******************/
+			function convert(query) {
+				tokens = query.split(" ");
+				ans = tokens[0];
+				for(var i=1; i<tokens.length; i++) {
+					ans += "+" + tokens[i];
+				}
+				return ans;
+			}
+
+			/*************** Spell Suggestion **********************/
+			function show_suggestion() {
+				originalQuery = " " + originalQuery;
+				if(corrected_query != originalQuery) {
+					$("#suggestion").html(corrected_query);
+					$("#originalQuery").html(originalQuery);
+					$("#spellAlert").show();
+				}
+			}
+
+			function hide_suggestion() {
+				$("#spellAlert").hide();
+			}
+
+			function get_suggestion(word) {
+				murl = "http://localhost:" + $("#sport").val() + "/" + word.length + "/" + word;
+				var request = $.ajax({
+					url: murl,
+					type: "GET",
+					dataType: "text"
+				});
+				
+				//On Success of request
+				request.done(function(msg) {
+					response = jQuery.parseJSON(msg);
+					if(response.status == "true") {
+						corrected_query += " " + response.suggestion;
+					} else {
+						corrected_query += " " + response.word;
+					}
+
+					cnt = cnt + 1;
+					if(cnt == words.length) {
+						show_suggestion();
+						fetch_results(corrected_query);
+					}
+				});
+				
+				//On failure display error message
+				request.fail(function(jqXHR, textStatus) {
+					done = 0;
+					//alert( "Request failed: " + textStatus );
+					fetch_results(originalQuery);
+				});
+			}
+
+			function do_suggestion() {
+				originalQuery = $("#searchbar").val();
+				words = originalQuery.split(" ");
+				cnt = 0;
+				corrected_query = "";
+				for (var i=0; i<words.length; i++) {
+					get_suggestion(words[i]);
+				}
+
+				return 0;
+			}
+
+
+			/*************** Similar Results Fetch **********************/
+			function display_results(results) {
+				$("#results").html("");
+				for(var i=0; i<results.length; i++) {
+					$("#results").append("<tr><td>" + results[i] + "</td></tr>");
+				}
+			}
+
+			function fetch_results(query) {
+				query = convert(query);
+				murl = "http://localhost:" + $("#rport").val() + "/" + query.length + "/" + query;
+				$("#results").html("Searching . . . ");
+				var request = $.ajax({
+					url: murl,
+					type: "GET",
+					dataType: "text"
+				});
+				
+				//On Success of request
+				request.done(function(msg) {
+					response = jQuery.parseJSON(msg);
+					display_results(response);
+				});
+				
+				//On failure display error message
+				request.fail(function(jqXHR, textStatus) {
+					//alert( "Request failed: " + textStatus );
+				});
+			}
+
+			function perform_search() {
+				$("#spellAlert").hide();
+				done = 0;
+				do_suggestion();
+				//fetch_results(corrected_query);
+			}
+
+			function perform_search2() {
+				$("#spellAlert").hide();
+				originalQuery = $("#searchbar").val();
+				corrected_query = originalQuery;
+				fetch_results(originalQuery);
+			}
+
+			/*************** Auto Complete **********************/
+			var comp = 0
+			function display_completions(options) {
+				var autocomplete = $('input').typeahead();
+				autocomplete.data('typeahead').source = options;
+			}
+
+			function get_completions() {
+				var query = $("#searchbar").val();
+				if(comp == 1) {
+					return;
+				} else if(query.length < 2) {
+					return;
+				}
+
+				comp = 1;
+				query = convert(query);
+				murl = "http://localhost:" + $("#cport").val() + "/" + query.length + "/" + query;
+				var request = $.ajax({
+					url: murl,
+					type: "GET",
+					dataType: "text"
+				});
+				
+				//On Success of request
+				request.done(function(msg) {
+					comp = 0;
+					response = jQuery.parseJSON(msg);
+					display_completions(response);
+				});
+				
+				//On failure display error message
+				request.fail(function(jqXHR, textStatus) {
+					comp = 0;
+					//alert( "Request failed: " + textStatus );
+				});
+			}
+		</script>
+	</body>
+
+</html>
