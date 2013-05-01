@@ -11,8 +11,10 @@ Sagar Chordia
 
 This assignment submission includes the implementation of various features of a Search Engine after training on 30M query data provided by AOL for research purposes. The implemented features are:
 
-1) Predicting Similar Queries
-2) Query Auto Completion
+1) Predicting Similar Queries  
+
+2) Query Auto Completion  
+
 3) Spell Checker
 **************
 Instructions for Running
