@@ -9,7 +9,7 @@ Saif Hasan
 Sagar Chordia
 09005013
 
-This assignment submission includes the implementation of various features of a Search Engine after training on 30M query data provided by AOL for research purposes. The implemented features are:
+This assignment submission includes the implementation of various features of a Search Engine after training on [20M query data from AOL](https://github.com/ankit-maverick/InformationRetrievalassignment/blob/master/DataDescription.txt). The implemented features are:
 
 1) Predicting Similar Queries  
 
