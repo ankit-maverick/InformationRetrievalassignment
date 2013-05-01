@@ -9,6 +9,11 @@ Saif Hasan
 Sagar Chordia
 09005013
 
+This assignment submission includes the implementation of various features of a Search Engine after training on 30M query data provided by AOL for research purposes. The implemented features are:
+
+1) Predicting Similar Queries
+2) Query Auto Completion
+3) Spell Checker
 **************
 Instructions for Running
 	- Open one terminal and in it type following command
@@ -27,29 +32,7 @@ Instructions for Running
 	- For HTML Interface open index.html file
 
 ***************
-Files Structure
-
-web_mining/
-		   index.html
-		   main.py
-		   auto_complete/
-		  				/uni.py
-		  				/bi.py
-		  				/try.py
-		  				/tst.py
-		  				/test.txt
-		   spell_corrector/
-		   				/spellcorrector.h
-		   				/spell_corrector.cpp
-		   media/
-		   		/bootstrap-responsive.css
-		   		/bootstrap.css
-		   		/bootstrap.min.js
-		   		/jquery.min.js
-		   data_files/
-		   			 /SentiWordNet.txt
-		   			 /big.txt
-		   			 /out<1-10].txt
+For File Structure, see Description.txt
 
 **************
 Auto Complete:
