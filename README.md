@@ -1,5 +1,7 @@
-CS635 Information Retrieval and Web Mining : Assignment
+## CS635 Information Retrieval and Web Mining : Assignment
+### Guide : Prof. Soumen Chakrabarti
 
+#### Team Members :
 Ankit Agrawal
 10D070027
 
@@ -9,6 +11,7 @@ Saif Hasan
 Sagar Chordia
 09005013
 
+#### Description :
 This assignment submission includes the implementation of various features of a Search Engine after training on [20M query data from AOL](https://github.com/ankit-maverick/InformationRetrievalassignment/blob/master/DataDescription.txt). The implemented features are:
 
 1) Predicting Similar Queries  
@@ -16,8 +19,11 @@ This assignment submission includes the implementation of various features of a 
 2) Query Auto Completion  
 
 3) Spell Checker
-**************
-Instructions for Running
+
+#### Instructions for Running :
+
+##### Predicting similar queries :
+
 	- Open one terminal and in it type following command
 		$ python main_ram.py
 		
@@ -37,7 +43,7 @@ Instructions for Running
 For File Structure, see Description.txt
 
 **************
-Auto Complete:
+##### Auto Complete :
 
 	- Auto complete four files as listed above. Firstly using uni.py bi.py and try.py we generate all unigrams bi-grams and tri-grams	respectively from the Corpus (which are SentiWordNet.txt and big.txt) and stores them in test.txt file in decreasing order of their popularity in corpus.
 	- tst.py file read this corpus and generate appropriate tri structure to server requests.
@@ -50,7 +56,7 @@ Auto Complete:
 
 
 ****************
-Spell Suggestion:
+##### Spell Suggestion :
 
 	Spell Suggestion contain two files as described above.
 	Working of spell suggestion:
